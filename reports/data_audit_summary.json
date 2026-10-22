@@ -1,0 +1,66 @@
+{
+  "client_shape": [
+    100000,
+    50
+  ],
+  "record_shape": [
+    100000,
+    51
+  ],
+  "client_id_nulls": 0,
+  "record_id_nulls": 0,
+  "client_id_duplicates": 0,
+  "record_id_duplicates": 0,
+  "client_unique_ids": 100000,
+  "record_unique_ids": 100000,
+  "ids_in_both": 100000,
+  "ids_in_client_only": 0,
+  "ids_in_record_only": 0,
+  "client_row_duplicates": 0,
+  "record_row_duplicates": 0,
+  "common_columns_excluding_id": [],
+  "merged_inner_shape": [
+    100000,
+    100
+  ],
+  "merged_left_shape": [
+    100000,
+    100
+  ],
+  "merged_outer_shape": [
+    100000,
+    100
+  ],
+  "target_variable": "churn",
+  "target_found_in": [
+    "Record.csv"
+  ],
+  "target_nulls": 0,
+  "target_distribution": {
+    "0": 50438,
+    "1": 49562
+  },
+  "target_percentages": {
+    "0": 50.438,
+    "1": 49.562
+  },
+  "total_columns_audited": 101,
+  "columns_with_missing": 43,
+  "columns_missing_gt_30pct": [
+    "ownrent",
+    "lor",
+    "dwlltype",
+    "numbcars",
+    "HHstatin",
+    "dwllsize"
+  ],
+  "columns_negative_vals": [
+    "avg6rev",
+    "eqpdays",
+    "rev_Mean",
+    "totmrc_Mean",
+    "change_mou",
+    "change_rev"
+  ],
+  "zero_variance_columns": []
+}

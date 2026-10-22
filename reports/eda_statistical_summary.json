@@ -1,0 +1,165 @@
+{
+  "h1_mou_mannwhitney_p": 6.058379168751889e-59,
+  "h1_mou_stats": [
+    {
+      "mou_change_bin": "Severe Drop (<-100m)",
+      "total_customers": 22623,
+      "churn_rate": 0.5362241966140653,
+      "churn_pct": 53.622419661406525
+    },
+    {
+      "mou_change_bin": "Moderate Drop (-100 to -20m)",
+      "total_customers": 20416,
+      "churn_rate": 0.4933385579937304,
+      "churn_pct": 49.33385579937304
+    },
+    {
+      "mou_change_bin": "Slight Drop (-20 to 0m)",
+      "total_customers": 12368,
+      "churn_rate": 0.5317755498059509,
+      "churn_pct": 53.17755498059509
+    },
+    {
+      "mou_change_bin": "Slight Growth (0 to 20m)",
+      "total_customers": 8269,
+      "churn_rate": 0.4556778328697545,
+      "churn_pct": 45.56778328697545
+    },
+    {
+      "mou_change_bin": "Moderate Growth (20 to 100m)",
+      "total_customers": 16391,
+      "churn_rate": 0.4544567140503935,
+      "churn_pct": 45.44567140503935
+    },
+    {
+      "mou_change_bin": "Strong Growth (>100m)",
+      "total_customers": 19042,
+      "churn_rate": 0.4667051780275181,
+      "churn_pct": 46.67051780275181
+    }
+  ],
+  "h2_eqp_mannwhitney_p": 0.0,
+  "h2_stats": [
+    {
+      "eqp_bracket": "< 6 Months (New)",
+      "total_customers": 18327,
+      "churn_rate": 0.41736236154307854,
+      "churn_pct": 41.73623615430785
+    },
+    {
+      "eqp_bracket": "6 - 12 Months",
+      "total_customers": 36356,
+      "churn_rate": 0.4697161403894818,
+      "churn_pct": 46.971614038948175
+    },
+    {
+      "eqp_bracket": "1 - 2 Years (Contract Maturity)",
+      "total_customers": 34505,
+      "churn_rate": 0.538385741196928,
+      "churn_pct": 53.838574119692794
+    },
+    {
+      "eqp_bracket": "> 2 Years (Aged Device)",
+      "total_customers": 10811,
+      "churn_rate": 0.5789473684210527,
+      "churn_pct": 57.89473684210527
+    }
+  ],
+  "h3_stats": [
+    {
+      "custcare_group": "0 Calls",
+      "total_customers": 55692,
+      "churn_rate": 0.5176147382029735,
+      "mean_drops": 5.858142402239532,
+      "churn_pct": 51.761473820297354
+    },
+    {
+      "custcare_group": "0.1 - 1 Calls/Mo",
+      "total_customers": 16100,
+      "churn_rate": 0.4939751552795031,
+      "mean_drops": 10.692298136626025,
+      "churn_pct": 49.39751552795031
+    },
+    {
+      "custcare_group": "1.1 - 3 Calls/Mo",
+      "total_customers": 12186,
+      "churn_rate": 0.46175939602822913,
+      "mean_drops": 13.797294709800836,
+      "churn_pct": 46.175939602822915
+    },
+    {
+      "custcare_group": "> 3 Calls/Mo",
+      "total_customers": 16022,
+      "churn_rate": 0.44657346149045063,
+      "mean_drops": 21.089647567876856,
+      "churn_pct": 44.65734614904506
+    }
+  ],
+  "h4_stats": [
+    {
+      "subs_tier": "1 Subscriber (Single)",
+      "total_customers": 70524,
+      "churn_rate": 0.48672792240939255,
+      "churn_pct": 48.67279224093926
+    },
+    {
+      "subs_tier": "2 Subscribers (Pair)",
+      "total_customers": 24422,
+      "churn_rate": 0.5221521578904267,
+      "churn_pct": 52.21521578904267
+    },
+    {
+      "subs_tier": ">= 3 Subscribers (Family)",
+      "total_customers": 5054,
+      "churn_rate": 0.49149188761377127,
+      "churn_pct": 49.149188761377125
+    }
+  ],
+  "rev_stats": [
+    {
+      "rev_quintile": "Q1: Very Low (<$27)",
+      "total_customers": 19932,
+      "churn_rate": 0.528848083483845,
+      "avg_revenue": 22.383347088431265,
+      "total_monthly_revenue": 446144.874166612,
+      "churn_pct": 52.8848083483845,
+      "churned_revenue_at_risk": 235942.86165915395
+    },
+    {
+      "rev_quintile": "Q2: Low ($27-$39)",
+      "total_customers": 19933,
+      "churn_rate": 0.489941303366277,
+      "avg_revenue": 35.282318809676916,
+      "total_monthly_revenue": 703282.46083329,
+      "churn_pct": 48.9941303366277,
+      "churned_revenue_at_risk": 344567.12549530476
+    },
+    {
+      "rev_quintile": "Q3: Medium ($39-$53)",
+      "total_customers": 19923,
+      "churn_rate": 0.48476635044922955,
+      "avg_revenue": 47.47078690458114,
+      "total_monthly_revenue": 945760.48749997,
+      "churn_pct": 48.47663504492296,
+      "churned_revenue_at_risk": 458472.85992444464
+    },
+    {
+      "rev_quintile": "Q4: High ($53-$74)",
+      "total_customers": 19926,
+      "churn_rate": 0.48639967881160295,
+      "avg_revenue": 64.64814446786309,
+      "total_monthly_revenue": 1288178.92666664,
+      "churn_pct": 48.639967881160295,
+      "churned_revenue_at_risk": 626569.8161825291
+    },
+    {
+      "rev_quintile": "Q5: Very High (>$74)",
+      "total_customers": 19929,
+      "churn_rate": 0.48472075869336145,
+      "avg_revenue": 123.82300671552561,
+      "total_monthly_revenue": 2467668.70083371,
+      "churn_pct": 48.472075869336145,
+      "churned_revenue_at_risk": 1196130.2448719775
+    }
+  ]
+}

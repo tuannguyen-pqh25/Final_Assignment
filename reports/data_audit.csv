@@ -1,0 +1,102 @@
+table,column_name,dtype,null_count,null_pct,unique_count,min_val,max_val,negative_count,has_string_nan,notes,proposed_handling
+Client,uniqsubs,int64,0,0.0,15,1.0,196.0,0,False,Clean,Keep as feature
+Client,actvsubs,int64,0,0.0,12,0.0,53.0,0,False,Clean,Keep as feature
+Client,new_cell,object,0,0.0,3,N,Y,0,False,Clean,Keep as feature
+Client,crclscod,object,0,0.0,54,A,ZY,0,False,Clean,Keep as feature
+Client,asl_flag,object,0,0.0,2,N,Y,0,False,Clean,Keep as feature
+Client,totcalls,int64,0,0.0,12230,0.0,98874.0,0,False,Clean,Keep as feature
+Client,totmou,float64,0,0.0,23752,0.0,233419.0967,0,False,Clean,Keep as feature
+Client,totrev,float64,0,0.0,76104,3.65,27321.5,0,False,Clean,Keep as feature
+Client,adjrev,float64,0,0.0,75274,2.4,27071.3,0,False,Clean,Keep as feature
+Client,adjmou,float64,0,0.0,23455,0.0,232855.1,0,False,Clean,Keep as feature
+Client,adjqty,int64,0,0.0,12185,0.0,98705.0,0,False,Clean,Keep as feature
+Client,avgrev,float64,0,0.0,14863,0.48,924.27,0,False,Clean,Keep as feature
+Client,avgmou,float64,0,0.0,57931,0.0,7040.13,0,False,Clean,Keep as feature
+Client,avgqty,float64,0,0.0,34704,0.0,3017.11,0,False,Clean,Keep as feature
+Client,avg3mou,int64,0,0.0,3108,0.0,7716.0,0,False,Clean,Keep as feature
+Client,avg3qty,int64,0,0.0,1438,0.0,3909.0,0,False,Clean,Keep as feature
+Client,avg3rev,int64,0,0.0,507,1.0,1593.0,0,False,Clean,Keep as feature
+Client,avg6mou,float64,2839,2.839,2941,0.0,7217.0,0,False,Low missingness (2.839%),Standard median/mode imputation within training pipeline
+Client,avg6qty,float64,2839,2.839,1376,0.0,3256.0,0,False,Low missingness (2.839%),Standard median/mode imputation within training pipeline
+Client,avg6rev,float64,2839,2.839,451,-2.0,866.0,3,False,Low missingness (2.839%); Contains 3 negative values; Negative revenue/mou/change may represent billing adjustments or delta,Standard median/mode imputation within training pipeline
+Client,prizm_social_one,object,7388,7.388,5,C,U,0,False,Low missingness (7.388%),Standard median/mode imputation within training pipeline
+Client,area,object,40,0.04,19,ATLANTIC SOUTH AREA,TENNESSEE AREA,0,False,Low missingness (0.04%),Standard median/mode imputation within training pipeline
+Client,dualband,object,1,0.001,4,N,Y,0,False,Low missingness (0.001%),Standard median/mode imputation within training pipeline
+Client,refurb_new,object,1,0.001,2,N,R,0,False,Low missingness (0.001%),Standard median/mode imputation within training pipeline
+Client,hnd_price,float64,847,0.847,17,9.99,499.99,0,False,Low missingness (0.847%),Standard median/mode imputation within training pipeline
+Client,phones,float64,1,0.001,24,1.0,28.0,0,False,Low missingness (0.001%),Standard median/mode imputation within training pipeline
+Client,models,float64,1,0.001,14,1.0,16.0,0,False,Low missingness (0.001%),Standard median/mode imputation within training pipeline
+Client,hnd_webcap,object,10189,10.189,3,UNKW,WCMB,0,False,Low missingness (10.189%),Standard median/mode imputation within training pipeline
+Client,truck,float64,1732,1.732,2,0.0,1.0,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,rv,float64,1732,1.732,2,0.0,1.0,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,ownrent,object,33706,33.706,2,O,R,0,False,Moderate missingness (33.706%),Impute (median/mode) + missing indicator flag
+Client,lor,float64,30190,30.19,16,0.0,15.0,0,False,Moderate missingness (30.19%),Impute (median/mode) + missing indicator flag
+Client,dwlltype,object,31909,31.909,2,M,S,0,False,Moderate missingness (31.909%),Impute (median/mode) + missing indicator flag
+Client,marital,object,1732,1.732,5,A,U,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,adults,float64,23019,23.019,6,1.0,6.0,0,False,Low missingness (23.019%),Standard median/mode imputation within training pipeline
+Client,infobase,object,22079,22.079,2,M,N,0,False,Low missingness (22.079%),Standard median/mode imputation within training pipeline
+Client,income,float64,25436,25.436,9,1.0,9.0,0,False,Low missingness (25.436%),Standard median/mode imputation within training pipeline
+Client,numbcars,float64,49366,49.366,3,1.0,3.0,0,False,Moderate missingness (49.366%),Impute (median/mode) + missing indicator flag
+Client,HHstatin,object,37923,37.923,6,A,I,0,False,Moderate missingness (37.923%),Impute (median/mode) + missing indicator flag
+Client,dwllsize,object,38308,38.308,15,A,O,0,False,Moderate missingness (38.308%),Impute (median/mode) + missing indicator flag
+Client,forgntvl,float64,1732,1.732,2,0.0,1.0,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,ethnic,object,1732,1.732,17,B,Z,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,kid0_2,object,1732,1.732,2,U,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,kid3_5,object,1732,1.732,2,U,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,kid6_10,object,1732,1.732,2,U,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,kid11_15,object,1732,1.732,2,U,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,kid16_17,object,1732,1.732,2,U,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,creditcd,object,1732,1.732,2,N,Y,0,False,Low missingness (1.732%),Standard median/mode imputation within training pipeline
+Client,eqpdays,float64,1,0.001,1555,-5.0,1823.0,133,False,Low missingness (0.001%); Contains 133 negative values,Standard median/mode imputation within training pipeline
+Client,Customer_ID,int64,0,0.0,100000,1000001.0,1100000.0,0,False,Identifier key,Drop from modeling features; use only for join & QA
+Record,rev_Mean,float64,357,0.357,37468,-6.1675,3843.2625,5,False,Low missingness (0.357%); Contains 5 negative values; Negative revenue/mou/change may represent billing adjustments or delta,Standard median/mode imputation within training pipeline
+Record,mou_Mean,float64,357,0.357,9730,0.0,12206.75,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,totmrc_Mean,float64,357,0.357,8491,-26.915,409.99,23,False,Low missingness (0.357%); Contains 23 negative values,Standard median/mode imputation within training pipeline
+Record,da_Mean,float64,357,0.357,172,0.0,159.39,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,ovrmou_Mean,float64,357,0.357,2638,0.0,4320.75,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,ovrrev_Mean,float64,357,0.357,12315,0.0,1102.4,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,vceovr_Mean,float64,357,0.357,7516,0.0,896.0875,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,datovr_Mean,float64,357,0.357,774,0.0,423.54,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,roam_Mean,float64,357,0.357,5337,0.0,3685.2,0,False,Low missingness (0.357%),Standard median/mode imputation within training pipeline
+Record,change_mou,float64,891,0.891,7711,-3875.0,31219.25,53651,False,Low missingness (0.891%); Contains 53651 negative values; Negative revenue/mou/change may represent billing adjustments or delta,Standard median/mode imputation within training pipeline
+Record,change_rev,float64,891,0.891,32537,-1107.74,9963.6575,56150,False,Low missingness (0.891%); Contains 56150 negative values; Negative revenue/mou/change may represent billing adjustments or delta,Standard median/mode imputation within training pipeline
+Record,drop_vce_Mean,float64,0,0.0,328,0.0,232.6667,0,False,Clean,Keep as feature
+Record,drop_dat_Mean,float64,0,0.0,60,0.0,207.3333,0,False,Clean,Keep as feature
+Record,blck_vce_Mean,float64,0,0.0,442,0.0,385.3333,0,False,Clean,Keep as feature
+Record,blck_dat_Mean,float64,0,0.0,54,0.0,413.3333,0,False,Clean,Keep as feature
+Record,unan_vce_Mean,float64,0,0.0,986,0.0,848.6667,0,False,Clean,Keep as feature
+Record,unan_dat_Mean,float64,0,0.0,52,0.0,81.6667,0,False,Clean,Keep as feature
+Record,plcd_vce_Mean,float64,0,0.0,2907,0.0,2289.0,0,False,Clean,Keep as feature
+Record,plcd_dat_Mean,float64,0,0.0,389,0.0,733.6667,0,False,Clean,Keep as feature
+Record,recv_vce_Mean,float64,0,0.0,1829,0.0,3369.3333,0,False,Clean,Keep as feature
+Record,recv_sms_Mean,float64,0,0.0,94,0.0,517.3333,0,False,Clean,Keep as feature
+Record,comp_vce_Mean,float64,0,0.0,2316,0.0,1894.3333,0,False,Clean,Keep as feature
+Record,comp_dat_Mean,float64,0,0.0,366,0.0,559.3333,0,False,Clean,Keep as feature
+Record,custcare_Mean,float64,0,0.0,209,0.0,675.3333,0,False,Clean,Keep as feature
+Record,ccrndmou_Mean,float64,0,0.0,458,0.0,861.3333,0,False,Clean,Keep as feature
+Record,cc_mou_Mean,float64,0,0.0,9231,0.0,602.95,0,False,Clean,Keep as feature
+Record,inonemin_Mean,float64,0,0.0,1312,0.0,3086.6667,0,False,Clean,Keep as feature
+Record,threeway_Mean,float64,0,0.0,91,0.0,66.0,0,False,Clean,Keep as feature
+Record,mou_cvce_Mean,float64,0,0.0,68951,0.0,4514.4533,0,False,Clean,Keep as feature
+Record,mou_cdat_Mean,float64,0,0.0,4420,0.0,3032.05,0,False,Clean,Keep as feature
+Record,mou_rvce_Mean,float64,0,0.0,51988,0.0,3287.25,0,False,Clean,Keep as feature
+Record,owylis_vce_Mean,float64,0,0.0,882,0.0,644.3333,0,False,Clean,Keep as feature
+Record,mouowylisv_Mean,float64,0,0.0,26847,0.0,1802.7067,0,False,Clean,Keep as feature
+Record,iwylis_vce_Mean,float64,0,0.0,536,0.0,519.3333,0,False,Clean,Keep as feature
+Record,mouiwylisv_Mean,float64,0,0.0,21287,0.0,1703.5367,0,False,Clean,Keep as feature
+Record,peak_vce_Mean,float64,0,0.0,2125,0.0,2090.6667,0,False,Clean,Keep as feature
+Record,peak_dat_Mean,float64,0,0.0,236,0.0,281.0,0,False,Clean,Keep as feature
+Record,mou_peav_Mean,float64,0,0.0,64094,0.0,4015.3467,0,False,Clean,Keep as feature
+Record,mou_pead_Mean,float64,0,0.0,3168,0.0,1036.0533,0,False,Clean,Keep as feature
+Record,opk_vce_Mean,float64,0,0.0,1928,0.0,1643.3333,0,False,Clean,Keep as feature
+Record,opk_dat_Mean,float64,0,0.0,257,0.0,309.6667,0,False,Clean,Keep as feature
+Record,mou_opkv_Mean,float64,0,0.0,59693,0.0,4337.8933,0,False,Clean,Keep as feature
+Record,mou_opkd_Mean,float64,0,0.0,3539,0.0,2922.0433,0,False,Clean,Keep as feature
+Record,drop_blk_Mean,float64,0,0.0,514,0.0,489.6667,0,False,Clean,Keep as feature
+Record,attempt_Mean,float64,0,0.0,2918,0.0,2289.0,0,False,Clean,Keep as feature
+Record,complete_Mean,float64,0,0.0,2346,0.0,1894.3333,0,False,Clean,Keep as feature
+Record,callfwdv_Mean,float64,0,0.0,45,0.0,81.3333,0,False,Clean,Keep as feature
+Record,callwait_Mean,float64,0,0.0,263,0.0,212.6667,0,False,Clean,Keep as feature
+Record,churn,int64,0,0.0,2,0.0,1.0,0,False,"Target variable; distribution: {'0': 50438, '1': 49562}",Target variable (Y)
+Record,months,int64,0,0.0,56,6.0,61.0,0,False,Clean,Keep as feature
+Record,Customer_ID,int64,0,0.0,100000,1000001.0,1100000.0,0,False,Identifier key,Drop from modeling features; use only for join & QA
