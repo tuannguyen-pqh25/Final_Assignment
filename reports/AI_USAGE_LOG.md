@@ -1,6 +1,6 @@
 # AI USAGE LOG — GCI WORLD 2026 FINAL ASSIGNMENT
 
-Tài liệu này ghi lại một cách minh bạch việc sử dụng công cụ AI tạo sinh (Generative AI) trong toàn bộ quá trình thực hiện bài tập theo đúng hướng dẫn tại Mục 1.6 của [ChienLuoc.md](file:///d:/Project/Final_Assignment/ChienLuoc.md).
+Tài liệu này ghi lại một cách minh bạch việc sử dụng công cụ AI tạo sinh (Generative AI) trong toàn bộ quá trình thực hiện bài tập theo đúng hướng dẫn tại Mục 1.6 của quy chế đề bài (Course Rubric Section 1.6).
 
 > [!IMPORTANT]
 > **Quy định đạo đức & Kiểm toán bắt buộc (Rubric Section 1.6):**

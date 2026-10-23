@@ -24,11 +24,41 @@ SEED = 42
 pd.set_option("display.max_columns", 120)
 pd.set_option("display.max_rows", 100)
 
+# Check if running on Google Colab and auto-mount Google Drive
+try:
+    import google.colab
+    IN_COLAB = True
+    from google.colab import drive
+    drive.mount('/content/drive')
+    print("Google Colab environment detected. Google Drive mounted successfully.")
+except Exception:
+    IN_COLAB = False
+
 BASE_DIR = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
-DATA_DIR = BASE_DIR / "data" / "raw"
-if not DATA_DIR.exists():
+
+# Multi-environment data directory resolver for 'telecom' folder (Local PC, Google Colab, Google Drive)
+candidate_data_dirs = [
+    Path("/content/drive/MyDrive/Final Assignment/telecom"),
+    Path("/content/drive/MyDrive/Final_Assignment/telecom"),
+    BASE_DIR / "telecom",
+    Path.cwd() / "telecom",
+    Path("/content/telecom"),
+]
+
+DATA_DIR = None
+for candidate in candidate_data_dirs:
+    if (candidate / "Client.csv").exists() and (candidate / "Record.csv").exists():
+        DATA_DIR = candidate
+        break
+
+if DATA_DIR is None:
     DATA_DIR = BASE_DIR / "telecom"
-REPORTS_DIR = BASE_DIR / "reports"
+
+if IN_COLAB and not REPORTS_DIR_PARENT := BASE_DIR:
+    REPORTS_DIR = Path("/content/reports")
+else:
+    REPORTS_DIR = BASE_DIR / "reports"
+
 FIGURES_DIR = REPORTS_DIR / "figures"
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 

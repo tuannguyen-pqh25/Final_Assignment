@@ -1,0 +1,47 @@
+# ==============================================================================
+# .gitignore — GCI World 2026 Final Assignment (Project Phoenix)
+# ==============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Temporary / Scratch files
+test_math.pdf
+reports/tutorial_extracted.txt
+final_assignment_tutorial.pdf
+*.tmp
+*.log
+
+# Internal working documents & prompts (kept locally, not on public GitHub)
+prompt.md
+submisstion_guide.md
+submission_checklist.md
+AGENTS.md
+PROJECT_STATE.md
+ChienLuoc.md
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo

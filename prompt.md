@@ -1,1 +1,0 @@
-Đọc file AGENTS.md và PROJECT_STATE.md để nắm ngữ cảnh hiện tại. Tiếp tục thực hiện [GIAI ĐOẠN ] theo ChienLuoc.md.
