@@ -23,6 +23,11 @@ Nhật ký ghi lại các quyết định kỹ thuật, nghiệp vụ, thiết k
 | **DEC-013** | 2026-10-22 | 3 | Hợp nhất quy trình phân tích vào MỘT file kịch bản duy nhất `telecom_retention_analysis.py` | Tuân thủ chính xác yêu cầu nộp 1 notebook/script của Omnicampus; tiện copy/paste và chạy liên tục trên Google Colab | **ACCEPTED** |
 | **DEC-014** | 2026-10-22 | 4 | Xác lập kiến trúc khung thời gian dự báo (Horizon) và Khoảng đệm tác nghiệp (Lead Time) | Churn 31–60 ngày sau ngày quan sát $T_0$; ngày 1–30 là lead time thực thi chiến dịch giữ chân; loại trừ `Customer_ID`, 98 predictor là thông tin tiền $T_0$ | **ACCEPTED** |
 | **DEC-015** | 2026-10-22 | 4 | Thiết lập thứ bậc chỉ số đánh giá gắn với ma trận giá trị kỳ vọng ròng (Expected Value Matrix) | Không dùng duy nhất Accuracy; ROC-AUC (xếp hạng toàn cục), PR-AUC/Lift@20% (hiệu quả chiến dịch), Net Profit (tối ưu ngưỡng $\tau^*$) | **ACCEPTED** |
+| **DEC-016** | 2026-10-23 | 5 | Phân chia tập dữ liệu 70% Train / 15% Val / 15% Test phân tầng và cô lập hoàn toàn tập Test | Đảm bảo tính khách quan (unbiased); tập test (15.000 dòng) được khóa chặt, không dùng để tune/chọn feature/ngưỡng | **ACCEPTED** |
+| **DEC-017** | 2026-10-23 | 5 | Áp dụng chiến lược Missing Indicators thay vì loại bỏ biến khuyết thiếu cao | Thực nghiệm ablation chứng minh giữ nguyên 6 biến missing >30% kết hợp MissingIndicator tăng +0,51% ROC-AUC so với drop | **ACCEPTED** |
+| **DEC-018** | 2026-10-23 | 5 | Xây dựng 12 đặc trưng nghiệp vụ gắn với 4 giả thuyết EDA (H1–H4) và phân tầng rủi ro | Tính toán thuần túy hàng-ngang (row-wise) tại $T_0$, không rò rỉ tương lai; tăng thêm +0,62% ROC-AUC (+1,13% tổng cộng) | **ACCEPTED** |
+| **DEC-019** | 2026-10-23 | 6 | Lựa chọn HistGradientBoostingClassifier làm mô hình quán quân (Champion Model) | Vượt trội hoàn toàn Dummy (0,5000) và LogReg (0,6392) với Val ROC-AUC 0,6903 và Test ROC-AUC 0,6964; Lift Top 20% đạt 1,46x | **ACCEPTED** |
+| **DEC-020** | 2026-10-23 | 6 | Tối ưu hóa ngưỡng phân loại tác nghiệp $\tau^* = 0,25$ theo Ma trận Chi phí - Lợi ích | Tăng lợi nhuận ròng giữ chân thêm +$90.977 (+26,2%) trên 15k khách hàng nhờ bù đắp bất đối xứng chi phí $C_{FN} >> C_{FP}$ | **ACCEPTED** |
 
 ---
 
@@ -193,5 +198,154 @@ Nhật ký ghi lại các quyết định kỹ thuật, nghiệp vụ, thiết k
   2. Ghi nhận đặc điểm mẫu quan sát cân bằng 50/50 (49,56% churn): Phản ánh quy trình lấy mẫu case-control có chủ đích của Company A (so với mức tự nhiên 1–1,5%/tháng). Mô hình học tốt trật tự rủi ro tương đối, nhưng khi tính toán lợi nhuận toàn mạng cần hiệu chỉnh xác suất theo định lý Bayes.
 - **Phương án thay thế:** Chỉ sử dụng duy nhất Accuracy để đánh giá mô hình. Bị loại bỏ vì Accuracy coi chi phí bỏ sót một khách hàng churn (False Negative, mất hàng trăm USD CLV) ngang bằng với việc tặng thừa một ưu đãi cho khách hàng trung thành (False Positive, tốn vài chục USD chiết khấu).
 - **Bằng chứng / Cơ sở:** Mục 233 của [ChienLuoc.md](file:///d:/Project/Final_Assignment/ChienLuoc.md); [reports/problem_definition.md](file:///d:/Project/Final_Assignment/reports/problem_definition.md) Mục 5; EVD-032 đến EVD-034.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-016: Phân chia tập dữ liệu 70% Train / 15% Val / 15% Test phân tầng và cô lập hoàn toàn tập Test
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 5 (Data Preparation & Controlled Feature Pipeline)
+- **Quyết định:**
+  1. Phân chia 100.000 bản ghi thành 3 tập dữ liệu độc lập có kích thước nguyên tuyệt đối:
+     - **Training Set (`X_train`, `y_train`):** 70.000 khách hàng (70,0%) — dùng để fit imputer, scaler, encoder và huấn luyện mô hình.
+     - **Validation Set (`X_val`, `y_val`):** 15.000 khách hàng (15,0%) — dùng để so sánh thuật toán, tinh chỉnh siêu tham số và tối ưu hóa ngưỡng cắt $\tau^*$.
+     - **Held-Out Test Set (`X_test`, `y_test`):** 15.000 khách hàng (15,0%) — **KHÓA CHẶT (LOCKED)**. Tuyệt đối không can thiệp, không fit bất kỳ transformer nào, chỉ đánh giá đúng 1 lượt ở Giai đoạn 6 / Giai đoạn 11.
+  2. Toàn bộ các bước chia mẫu đều áp dụng `stratify=y` (đảm bảo tỷ lệ churn đạt 49,56% đồng nhất trên cả 3 tập) và cố định `random_state=42` (DEC-002).
+- **Phương án thay thế:** Chia 80/20 train/test thông thường rồi tune trên test. Bị loại vì vi phạm nguyên tắc chống rò rỉ dữ liệu (overfitting vào test set).
+- **Bằng chứng / Cơ sở:** [reports/feature_decisions.md](file:///d:/Project/Final_Assignment/reports/feature_decisions.md) Mục 6; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Cell 4.3; EVD-035.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-017: Áp dụng chiến lược Missing Indicators thay vì loại bỏ biến khuyết thiếu cao
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 5 (Data Preparation & Controlled Feature Pipeline)
+- **Quyết định:**
+  1. Không xóa bỏ 6 biến nhân khẩu học có missing >30% (`numbcars`, `dwllsize`, `HHstatin`, `ownrent`, `dwlltype`, `lor`).
+  2. Triển khai kiến trúc xử lý khuyết thiếu kép thông qua `sklearn.compose.ColumnTransformer`:
+     - Biến số (Numerical): `SimpleImputer(strategy='median', add_indicator=True)` kết hợp `StandardScaler()`. Việc thêm cờ `MissingIndicator` giúp mô hình nhận biết được thuê bao nào không khai báo thông tin tài sản.
+     - Biến phân loại (Categorical): `SimpleImputer(strategy='constant', fill_value='Missing')` kết hợp `OneHotEncoder(handle_unknown='ignore', sparse_output=False)`.
+  3. Mọi imputer/scaler chỉ được `fit()` trên `X_train` và `transform()` trên `X_val`/`X_test`.
+- **Phương án thay thế:** Tự động loại bỏ toàn bộ các cột có missing >30%. Bị bác bỏ vì thực nghiệm đối sánh (ablation test) cho thấy phương án loại bỏ chỉ đạt ROC-AUC **0,6278**, trong khi phương án giữ lại kèm Missing Indicator đạt ROC-AUC **0,6329** (+0,0051 điểm % ROC-AUC).
+- **Bằng chứng / Cơ sở:** [reports/feature_decisions.md](file:///d:/Project/Final_Assignment/reports/feature_decisions.md) Mục 3; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Cell 4.4 - 4.6; EVD-036.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-018: Xây dựng 12 đặc trưng nghiệp vụ gắn với 4 giả thuyết EDA (H1–H4) và phân tầng rủi ro
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 5 (Data Preparation & Controlled Feature Pipeline)
+- **Quyết định:** Xây dựng hàm tiền xử lý `engineer_telecom_features(df)` tạo ra 12 biến đặc trưng mang tính giải thích và hành động cao:
+  - Nhóm Vòng đời thiết bị (H2): `eqpdays_years`, `eqp_over_1yr`, `eqp_over_2yr`, `eqp_to_tenure_ratio`.
+  - Nhóm Suy giảm tiêu dùng (H1): `severe_mou_drop`, `severe_rev_drop`.
+  - Nhóm Ma sát giá & Sốc cước: `rev_per_mou`, `overage_rev_ratio`.
+  - Nhóm Tương tác CSKH & Silent Churners (H3): `silent_churner_flag`, `drop_per_call`.
+  - Nhóm Cấu trúc tài khoản & Doanh thu rủi ro (H4 & Value-at-Risk): `multi_line_flag`, `high_arpu_tier`.
+  Tất cả các biến đều được tính toán thuần túy trên từng hàng (row-wise) tại thời điểm $T_0$, không sử dụng thống kê tổng hợp chéo giữa các hàng, triệt tiêu hoàn toàn rò rỉ dữ liệu.
+- **Phương án thay thế:** Chỉ sử dụng 98 biến thô nguyên bản. Bị loại vì thực nghiệm chứng minh 12 biến nghiệp vụ giúp nâng ROC-AUC của Logistic Regression từ 0,6329 lên **0,6391** (+0,0062 điểm %; tích lũy +0,0113 so với baseline).
+- **Bằng chứng / Cơ sở:** [reports/feature_decisions.md](file:///d:/Project/Final_Assignment/reports/feature_decisions.md) Mục 4; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Cell 4.1 & 4.6; EVD-037.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-019: Lựa chọn HistGradientBoostingClassifier làm mô hình quán quân (Champion Model)
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 6 (Benchmark và chọn mô hình Machine Learning)
+- **Quyết định:**
+  1. Thiết lập bộ benchmark 4 họ thuật toán: `DummyClassifier` (mốc tối thiểu), `LogisticRegression` (mốc tuyến tính giải thích), `RandomForestClassifier` (bagging ensemble), và `HistGradientBoostingClassifier` (boosting gradient cây quyết định dạng histogram).
+  2. Lựa chọn `HistGradientBoostingClassifier(max_iter=150, max_depth=6, min_samples_leaf=30, l2_regularization=1.0)` làm mô hình quán quân (Champion Model) để triển khai thực tế.
+  3. Mô hình đạt ROC-AUC **0,6903** và PR-AUC **0,6772** trên tập Validation (15.000 mẫu); vượt qua bài kiểm toán tổng quát hóa độc lập trên tập Held-out Test (15.000 mẫu) với ROC-AUC **0,6964** và PR-AUC **0,6865** (chênh lệch < 0,0061, hoàn toàn không suy giảm/overfitting).
+  4. Năng lực phân loại theo phân vị (Decile Lift): Nhóm 20% rủi ro cao nhất (Decile 1 & 2) đạt mật độ churn **72,53%** (so với tỷ lệ cơ sở 49,56%), mang lại hệ số **Lift = 1,46x**.
+- **Bằng chứng / Cơ sở:** [reports/model_benchmarks.md](file:///d:/Project/Final_Assignment/reports/model_benchmarks.md) Mục 2; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Section 5; EVD-039 đến EVD-042; Fig 9.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-020: Tối ưu hóa ngưỡng phân loại tác nghiệp $\tau^* = 0,25$ theo Ma trận Chi phí - Lợi ích
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 6 (Benchmark và chọn mô hình Machine Learning)
+- **Quyết định:**
+  1. Bác bỏ việc áp dụng ngưỡng phân loại mặc định $\tau = 0,50$ cho chiến dịch giữ chân khách hàng.
+  2. Xác lập ngưỡng phân loại tác nghiệp tối ưu $\tau^* = 0,25$ dựa trên hàm mục tiêu tối đa hóa Lợi nhuận Giữ chân Ròng Kỳ vọng (Expected Net Retained Profit):
+     - Chi phí bỏ sót 1 khách hàng churn ($C_{\text{FN}} \approx \$126 - \$504$ giá trị CLV biên mất đi) lớn hơn rất nhiều chi phí tặng nhầm ưu đãi cho 1 khách hàng không churn ($C_{\text{FP}} \approx \$35$ voucher chiết khấu + $\$3$ phí liên hệ).
+     - Việc hạ ngưỡng cắt về $\tau^* = 0,25$ giúp mở rộng tỷ lệ bao phủ khách hàng churn từ 64,6% lên **97,24%** (bắt trúng 7.229 / 7.434 khách hàng rời mạng trên tập validation).
+  3. Giá trị kinh tế gia tăng: Lợi nhuận giữ chân ròng tăng từ **$346.585,14** (ở $\tau = 0,50$) lên **$437.562,36** (ở $\tau^* = 0,25$), mang lại khoản thặng dư ròng **+$90.977,22 (+26,2%)** trên mỗi 15.000 thuê bao tiếp cận.
+- **Phương án thay thế:** Giữ nguyên ngưỡng cắt 0,50 để tối đa hóa Accuracy. Bị bác bỏ vì tối ưu Accuracy bỏ lọt hơn 35% khách hàng rời mạng, gây thất thoát tài chính nghiêm trọng cho nhà mạng.
+- **Bằng chứng / Cơ sở:** [reports/model_benchmarks.md](file:///d:/Project/Final_Assignment/reports/model_benchmarks.md) Mục 5; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Cell 5.4 - 5.5; EVD-043 đến EVD-045; Fig 10.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+
+### DEC-021: Thiết lập Khung phân loại Tính khả thi Hành động (Actionability Framework) và Phân định Nhân quả
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 7 (Model Interpretation, Robustness & Actionability Audit)
+- **Quyết định:**
+  1. Tuyệt đối không đồng nhất Permutation Feature Importance với quan hệ nhân quả (Causality). Tầm quan trọng của feature chỉ phản ánh mức độ phụ thuộc dự báo thống kê của mô hình trên dữ liệu quan sát lịch sử, không chứng minh việc thay đổi giá trị biến sẽ trực tiếp làm giảm churn.
+  2. Thiết lập ranh giới phân loại 3 nhóm biến trong không gian đặc trưng:
+     - **Đòn bẩy chiến lược can thiệp được (Actionable Levers):** Các yếu tố nhà mạng có thể chủ động tác động qua chính sách giá, ưu đãi thiết bị, hoặc tối ưu kỹ thuật: `eqpdays` (trợ giá nâng cấp máy), `change_mou` (tối ưu gói cước rightsizing), `rev_per_mou` / `overage_rev_ratio` (xóa bỏ sốc cước/chuyển đổi gói không giới hạn), `drop_vce_Mean` / `drop_per_call` (xử lý điểm lõm sóng và bù cước dịch vụ).
+     - **Tín hiệu bối cảnh quan sát (Observational Signals):** Các cột mốc vòng đời tự nhiên không thể can thiệp trực tiếp: `months` (thời gian thuê bao gắn bó chỉ dùng để kích hoạt thời điểm tái ký hợp đồng tháng thứ 11/23), `totmrc_Mean` (mức cước cam kết dùng để định mức ngân sách ưu đãi), `avgmou`, `avgqty`, `mou_Mean`.
+     - **Thuộc tính nhạy cảm đạo đức (Sensitive / Demographic):** `ethnic`, `income`, `marital`, `lor`, `ownrent` — được cô lập và cấm sử dụng trong tác nghiệp marketing.
+  3. Mọi giải pháp giữ chân ở Giai đoạn 8 bắt buộc phải đi kèm thiết kế thử nghiệm A/B có nhóm đối chứng ngẫu nhiên (Holdout Control Group) để đo lường độ nâng gia tăng thực tế (incremental uplift).
+- **Phương án thay thế:** Tuyên bố mô hình tìm ra nguyên nhân gốc rễ và đề xuất can thiệp vào mọi biến có importance cao (kể cả tenure và nhân khẩu). Bị bác bỏ vì ngụy biện nhân quả sẽ dẫn đến thất bại chiến dịch trong thực tế.
+- **Bằng chứng / Cơ sở:** [reports/model_interpretation.md](file:///d:/Project/Final_Assignment/reports/model_interpretation.md) Mục 2 & 3; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Section 6.1 - 6.2; EVD-046, EVD-047; Fig 11.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-022: Thiết lập Tường lửa Đạo đức (Ethical Firewall) và Tiêu chuẩn Ổn định Phân khúc (Subgroup Robustness)
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 7 (Model Interpretation, Robustness & Actionability Audit)
+- **Quyết định:**
+  1. **Tường lửa đạo đức (Ethical & Anti-discrimination Firewall):** Nghiêm cấm tuyệt đối việc sử dụng các biến nhân khẩu học nhạy cảm (`ethnic` chủng tộc, `income` thu nhập ước tính, `marital` tình trạng hôn nhân, `ownrent` sở hữu nhà) làm tiêu chí chọn mẫu, lọc danh sách tiếp cận hoặc định giá ưu đãi trong các chiến dịch giữ chân.
+  2. Chiến dịch giữ chân chỉ được phép nhắm mục tiêu dựa trên 3 trụ cột kỹ thuật khách quan:
+     - **Mức độ rủi ro (Risk Tier):** Xác suất churn dự báo $\ge \tau^* = 0,25$.
+     - **Triệu chứng hành vi cần can thiệp (Actionable Trigger):** Máy cũ $>365$ ngày, sụt giảm tiêu dùng $<-100$ phút, tỷ lệ cước phạt phát sinh $>20\%$.
+     - **Giá trị kinh tế (ARPU / CLV Tier):** Đảm bảo chi phí ưu đãi không vượt quá 70% giá trị biên đóng góp hàng tháng.
+  3. **Tiêu chuẩn ổn định phân khúc (Subgroup Robustness):** Nghiệm thu chất lượng mô hình trên 15.000 mẫu validation:
+     - ROC-AUC ổn định từ **0,6370** đến **0,7363** trên mọi nhóm thiết bị, phân vị doanh thu, số dòng thuê bao và thời gian gắn bó, vượt qua cổng chất lượng tối thiểu $\ge 0,6000$ (không xảy ra hiện tượng sụp đổ thuật toán ở bất kỳ phân khúc nào).
+     - Tính bất biến theo quy mô tài khoản: Thuê bao đơn (Single-line, AUC = 0,6910) và Đa thuê bao (Multi-line, AUC = 0,6890) có năng lực phân loại tương đương (chênh lệch $< 0,0020$).
+     - Độ phủ tiếp cận toàn diện: Tại ngưỡng $\tau^* = 0,25$, mô hình bắt trúng từ **91,51% đến 99,82%** khách hàng rời mạng trên tất cả các phân khúc tác nghiệp.
+- **Phương án thay thế:** Không kiểm toán phân khúc và sử dụng mọi thuộc tính cá nhân để tối đa hóa AUC. Bị bác bỏ vì vi phạm chuẩn mực đạo đức AI, rủi ro pháp lý chống phân biệt đối xử và nguy cơ thiên lệch mô hình.
+- **Bằng chứng / Cơ sở:** [reports/model_interpretation.md](file:///d:/Project/Final_Assignment/reports/model_interpretation.md) Mục 4; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Section 6.3; EVD-048 đến EVD-050; Fig 12.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-023: Lựa chọn Ưu tiên Chiến lược Cốt lõi (Project Phoenix) và Khung Tác nghiệp Giữ chân Đa tầng (Value-Tier Routing)
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 8 (Thiết kế Business Proposal và Định lượng Tác động Tài chính)
+- **Quyết định:**
+  1. **Hội tụ vào MỘT ưu tiên chiến lược duy nhất:** Khởi động *"Project Phoenix: Chương trình Trợ giá Nâng cấp Thiết bị Chủ động & Tối ưu Gói cước"* (Proactive Handset Upgrade & Tariff Rightsizing Retention Program).
+     - Bác bỏ phương án dàn trải ngân sách vào nhiều thử nghiệm marketing phân mảnh; tập trung nguồn lực giải quyết điểm nghẽn nghiêm trọng nhất đã được xác thực qua EDA và Model: Vực thẳm churn khi thiết bị cũ quá 1 năm (`eqpdays` > 365 ngày, churn 53,8%–57,9%, EVD-023; feature rank 2, EVD-046) và sụt giảm tiêu dùng đột ngột (`change_mou` < -100 phút, churn 53,6%, EVD-024; feature rank 3, EVD-046).
+  2. **Quy trình tác nghiệp phân tầng theo Giá trị Thuê bao (Value-Tier Routing):**
+     - Áp dụng Tường lửa đạo đức (DEC-022): Tuyệt đối không dùng biến nhân khẩu học (`ethnic`, `income`, `marital`) để chọn mẫu hay định giá ưu đãi.
+     - Phân bổ kênh tiếp cận và chi phí ưu đãi theo mức đóng góp biên thực tế:
+       * **Phân tầng Giá trị Cao (ARPU > $75, chiếm 41,8% rủi ro):** Điều phối sang Bàn Concierge Chăm sóc Đặc biệt (Outbound Phone Concierge), ưu đãi voucher $50 nâng cấp máy 5G kèm cam kết tái ký hợp đồng 12 tháng.
+       * **Phân tầng Trung bình (ARPU $40–$75, chiếm 45,2% rủi ro):** Kênh số tự động qua MyCompanyA Mobile App và Email cá nhân hóa, voucher $35 đổi máy + tối ưu gói cước rightsizing không cước phạt phát sinh.
+       * **Phân tầng Tăng trưởng / Cơ bản (ARPU < $40, chiếm 13,0% rủi ro):** SMS tương tác tự động và cổng web tự phục vụ, voucher $25 phụ kiện/thiết bị + gói cước trọn gói (flat-rate).
+  3. **Chủ thể chịu trách nhiệm (Program Ownership):** Trực tiếp thuộc quyền điều hành của Phó Tổng Giám đốc Thương mại (CCO) / Trưởng bộ phận Giữ chân Khách hàng (Head of Retention), phối hợp liên phòng ban với Data Science (chấm điểm định kỳ hàng tuần), Marketing (thiết kế ưu đãi), và Chuỗi cung ứng (phân bổ máy 5G từ đối tác OEM).
+- **Phương án thay thế:** Triển khai đại trà ưu đãi giảm giá cước chung cho toàn bộ thuê bao hoặc chỉ can thiệp bị động khi khách gọi lên tổng đài. Bị bác bỏ vì EDA chứng minh 51,8% khách rời mạng trong im lặng (EVD-025), và giảm cước đại trà gây thất thoát biên lợi nhuận nghiêm trọng (deadweight loss).
+- **Bằng chứng / Cơ sở:** [reports/business_proposal.md](file:///d:/Project/Final_Assignment/reports/business_proposal.md) Mục 1, 2, 3; EVD-023, EVD-024, EVD-025, EVD-027, EVD-046; Fig 11.
+- **Trạng thái:** **ACCEPTED**.
+
+---
+
+### DEC-024: Khung Quản trị Tài chính Đa Kịch bản (Multi-Scenario ROI Governance) và Thử nghiệm Đối chứng Ngẫu nhiên (Randomized Holdout Pilot)
+- **Ngày:** 2026-10-23
+- **Giai đoạn:** Giai đoạn 8 (Thiết kế Business Proposal và Định lượng Tác động Tài chính)
+- **Quyết định:**
+  1. **Tuyệt đối chống ngụy biện quy kết (Zero Attribution Fallacy):** Nghiêm cấm quy đổi trực tiếp các chỉ số kỹ thuật của mô hình (ROC-AUC 0,6964 hay Accuracy 64,1%) thành tỷ lệ khách hàng được giữ chân hay doanh thu gia tăng. Doanh thu giữ chân chỉ phát sinh khi có hành động can thiệp kinh doanh thực tế tác động làm thay đổi hành vi của khách hàng.
+  2. **Mô hình tài chính 3 kịch bản minh bạch (3-Scenario Economic Model):**
+     - Xây dựng bảng dự phóng tài chính với công thức đại số tường minh trên 2 quy mô: Thử nghiệm Pilot (15.000 thuê bao) và Vận hành Toàn niên (100.000 thuê bao):
+       * **Kịch bản Thận trọng (Conservative):** Retention Uplift = 15%, Take-up = 25%, ARPU = $55, Margin = 65%, $C_{\text{voucher}} = \$40$, $C_{\text{outreach}} = \$4$. Pilot mang lại **+$256.635,90** lợi nhuận ròng (ROI 122,9%); Quy mô năm mang lại **+$1.810.769,00** lợi nhuận ròng (ROI 140,1%).
+       * **Kịch bản Cơ sở (Base Case):** Retention Uplift = 25%, Take-up = 35%, ARPU = $58,35, Margin = 70%, $C_{\text{voucher}} = \$35$, $C_{\text{outreach}} = \$3$. Pilot mang lại **+$660.236,19** lợi nhuận ròng (ROI 291,9%); Quy mô năm mang lại **+$4.501.233,28** lợi nhuận ròng (ROI 319,7%). Chi phí giữ chân một khách hàng (CPRS) là **$116,77** (rẻ hơn 3x–5x so với CAC $350–$600).
+       * **Kịch bản Lạc quan (Optimistic):** Retention Uplift = 35%, Take-up = 45%, ARPU = $62, Margin = 75%, $C_{\text{voucher}} = \$30$, $C_{\text{outreach}} = \$2,50$. Pilot mang lại **+$1.176.232,20** lợi nhuận ròng (ROI 497,2%); Quy mô năm mang lại **+$7.940.946,00** lợi nhuận ròng (ROI 537,6%).
+  3. **Biên an toàn vượt trội (Break-even Frontier):** Điểm hòa vốn chương trình chỉ yêu cầu tỷ lệ giữ chân gia tăng đạt từ **5,49% đến 6,73%**. So với chuẩn ngành viễn thông đạt từ 20% đến 35%, dự án có biên an toàn (margin of safety) lớn hơn **3,0x**, đảm bảo khả năng sinh lời ngay cả trong điều kiện biên lợi nhuận bị ép xuống 55%.
+  4. **Kiến trúc Thử nghiệm Đối chứng Ngẫu nhiên (Randomized Controlled Holdout Trial):**
+     - Bắt buộc triển khai Pilot trên 15.000 thuê bao nguy cơ cao ($\hat{p} \ge 0,25$): Chia ngẫu nhiên **90% Nhóm can thiệp (Treatment Group, $N=13.500$)** nhận ưu đãi Project Phoenix và **10% Nhóm đối chứng giữ nguyên (Holdout Control Group, $N=1.500$)** hoàn toàn không can thiệp (business-as-usual).
+     - Đo lường độ nâng gia tăng thực tế thuần túy (Pure Incremental Uplift) = Churn Nhóm Đối chứng − Churn Nhóm Can thiệp. Đảm bảo lực thống kê $>80\%$ để phát hiện hiệu quả $\ge 4,5\%$ ở mức ý nghĩa $\alpha = 0,05$. Chỉ khi Pilot đạt ý nghĩa thống kê và lợi nhuận ròng $> \$250.000$ mới được mở rộng quy mô toàn mạng.
+- **Phương án thay thế:** Giả định toàn bộ khách hàng churn được mô hình nhận diện đều sẽ ở lại mạng và tính ROI hàng chục triệu USD không cần thử nghiệm. Bị bác bỏ vì vi phạm chuẩn mực quản trị tài chính doanh nghiệp, che giấu rủi ro kinh doanh và không kiểm chứng được thực tế.
+- **Bằng chứng / Cơ sở:** [reports/business_proposal.md](file:///d:/Project/Final_Assignment/reports/business_proposal.md) Mục 4, 5, 6; [notebooks/telecom_retention_analysis.py](file:///d:/Project/Final_Assignment/notebooks/telecom_retention_analysis.py) Section 7; [notebooks/07_business_proposal_roi_model.py](file:///d:/Project/Final_Assignment/notebooks/07_business_proposal_roi_model.py); Fig 13; EVD-051 đến EVD-056.
 - **Trạng thái:** **ACCEPTED**.
 

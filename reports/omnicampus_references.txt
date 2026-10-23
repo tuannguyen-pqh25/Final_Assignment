@@ -1,0 +1,21 @@
+# REFERENCES LIST FOR OMNICAMPUS SUBMISSION
+================================================================================
+Hướng dẫn: Sao chép toàn bộ khối văn bản bên dưới và dán trực tiếp vào trường
+"References" (Tài liệu tham khảo) trên giao diện nộp bài của Omnicampus.
+================================================================================
+
+[1] Reichheld, F. F., & Schefter, P. (2000). E-Loyalty: Your Secret Weapon on the Web. Harvard Business Review, 78(4), 105–113. URL: https://hbr.org/2000/07/e-loyalty-your-secret-weapon-on-the-web
+
+[2] Bain & Company. (2018). Prescription for Cutting Costs: Loyal Customers. Bain Insights & Retention Research. URL: https://www.bain.com/insights/prescription-for-cutting-costs-loyal-customers/
+
+[3] Counterpoint Research. (2023). Global Smartphone Replacement Cycles Hit Record Highs. Market Monitor Insights. URL: https://www.counterpointresearch.com/insights/smartphone-replacement-cycle/
+
+[4] GSMA Intelligence. (2024). The Mobile Economy 2024: Subscriber Churn & Retention Dynamics. URL: https://www.gsma.com/mobileeconomy/
+
+[5] Omnicampus & Company A Course Specification (2026). Telecom Churn Prediction & Retention Proposal Dataset Overview.
+
+[6] Generative AI Usage & Audit Trail Declaration (Section 1.6 Compliance):
+   Platform: Google Antigravity IDE (Local Agentic Pair-Programming Development Environment).
+   Audit Trail & Session Log: https://github.com/tuannguyen-pqh25/Final_Assignment/blob/main/reports/AI_USAGE_LOG.md
+   Local Reproducibility Master Script: notebooks/telecom_retention_analysis.py
+================================================================================
